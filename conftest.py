@@ -22,18 +22,40 @@ def get_playwright():
         yield playwright
 
 
+@fixture(scope='session')
+def get_browser(get_playwright, request):
+    browser = request.config.getoption('--browser')
+    headless = request.config.getini('headless')
+    if not browser:
+        browser = 'chromium'
+    if headless == 'True':
+        headless = True
+    else:
+        headless = False
+    if 'chromium' in browser:
+        browser_instance = get_playwright.chromium.launch(headless=headless)
+    elif 'firefox' in browser:
+        browser_instance = get_playwright.firefox.launch(headless=headless)
+    elif 'webkit' in browser:
+        browser_instance = get_playwright.webkit.launch(headless=headless)
+    else:
+        assert False, 'unsupported browser type'
+    yield browser_instance
+    browser_instance.close()
+
+
 @fixture(scope='class')
-def initial_page(preconditions, get_playwright):
-    app = BasePage(get_playwright, base_url=preconditions['base_url'])
+def initial_page(preconditions, get_browser):
+    app = BasePage(new_context=True, browser=get_browser, base_url=preconditions['base_url'])
     app.goto('/')
     yield app
     app.close()
 
 
 def pytest_addoption(parser):
-    parser.addoption('--environment', action='store', default = 'stage.json',
+    parser.addoption('--environment', action='store', default='stage.json',
                      help='Path to the target environment config file')
-    parser.addoption('--devices', action='store', default='')
+    parser.addini('headless', help='Whether to execute browser in headless mode', default='False')
 
 
 def load_config(file):
