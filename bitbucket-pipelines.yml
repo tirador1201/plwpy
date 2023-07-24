@@ -1,0 +1,13 @@
+#  Template python-build
+
+image: python:3.11
+
+pipelines:
+  default:
+      - step:
+          name: Test
+          caches:
+            - pip
+          script:
+            - pip install -r requirements.txt
+            - pytest --junitxml=test-reports/report.junitxml
