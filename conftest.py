@@ -21,7 +21,7 @@ def generate_email():
     yield email
     print("delete created email")
 
-@fixture(scope='session')
+'''@fixture(scope='session')
 def get_playwright():
     with sync_playwright() as playwright:
         yield playwright
@@ -30,28 +30,24 @@ def get_playwright():
 @fixture(scope='session')
 def get_browser(get_playwright, request):
     browser = request.config.getoption('--browser')
-    headless = request.config.getini('headless')
+    headed = request.config.getoption('--headed')
     if not browser:
         browser = 'chromium'
-    if headless == 'True':
-        headless = True
-    else:
-        headless = False
     if 'chromium' in browser:
-        browser_instance = get_playwright.chromium.launch(headless=headless)
+        browser_instance = get_playwright.chromium.launch(headless=not headed)
     elif 'firefox' in browser:
-        browser_instance = get_playwright.firefox.launch(headless=headless)
+        browser_instance = get_playwright.firefox.launch(headless=not headed)
     elif 'webkit' in browser:
-        browser_instance = get_playwright.webkit.launch(headless=headless)
+        browser_instance = get_playwright.webkit.launch(headless=not headed)
     else:
         assert False, 'unsupported browser type'
     yield browser_instance
     browser_instance.close()
-
+'''
 
 @fixture(scope='class')
-def initial_page(read_config, get_browser):
-    base = BasePage(new_context=True, browser=get_browser, base_url=read_config['base_url'])
+def initial_page(read_config, browser):
+    base = BasePage(new_context=True, browser=browser, base_url=read_config['base_url'], **kwargs)
     base.goto('/')
     yield base
     base.close()
@@ -60,7 +56,6 @@ def initial_page(read_config, get_browser):
 def pytest_addoption(parser):
     parser.addoption('--environment', action='store', default='stage.json',
                      help='Path to the target environment config file')
-    parser.addini('headless', help='Whether to execute browser in headless mode', default='False')
 
 
 def load_config(file):

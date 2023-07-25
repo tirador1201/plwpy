@@ -20,6 +20,7 @@ class TestLogin:
         login_page.input_code('123')
         print('')
 
-    def test_login2(self, generate_email):
+    def test_login2(self, generate_email, initial_page, browser_name):
         email = generate_email
+        home_page = HomePage(initial_page)
         print(email)
