@@ -5,16 +5,21 @@ from pytest import fixture
 from playwright.sync_api import sync_playwright
 
 from framework.base_page import BasePage
+from utils.api_utils import create_new_email
 
 
 @fixture(autouse=True, scope='session')
-def preconditions(request):
+def read_config(request):
     environment = request.config.getoption('--environment')
     config_data = load_config(environment)
-    print("create new user")
-    #create_new_user(config_data['base_url'])
     yield config_data
-    print("delete created user")
+
+@fixture(scope='session')
+def generate_email():
+    print("create new email")
+    email = create_new_email()
+    yield email
+    print("delete created email")
 
 @fixture(scope='session')
 def get_playwright():
@@ -45,8 +50,8 @@ def get_browser(get_playwright, request):
 
 
 @fixture(scope='class')
-def initial_page(preconditions, get_browser):
-    base = BasePage(new_context=True, browser=get_browser, base_url=preconditions['base_url'])
+def initial_page(read_config, get_browser):
+    base = BasePage(new_context=True, browser=get_browser, base_url=read_config['base_url'])
     base.goto('/')
     yield base
     base.close()

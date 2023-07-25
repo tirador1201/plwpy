@@ -12,5 +12,6 @@ class HomePage(BasePage):
         self.enroll_now_btn = self.page.locator("//a[@data-element-id='HEADER_BUTTON_ENROLL_NOW']")
         self.get_started_btn = self.page.locator("//a[@data-element-id='HOMEPAGE_LINK_WELCOME_ENROLL_CTA']")
 
+
     def enroll_now(self):
         self.enroll_now_btn.first.click()
