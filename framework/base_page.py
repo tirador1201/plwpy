@@ -14,9 +14,8 @@ class BasePage:
             self.page.goto(self.base_url + endpoint)
         else:
             self.page.goto(endpoint)
-        self.page.wait_for_load_state()
 
 
     def close(self):
         self.page.close()
-        self.browser.close()
+        self.context.close()

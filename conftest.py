@@ -46,10 +46,10 @@ def get_browser(get_playwright, request):
 
 @fixture(scope='class')
 def initial_page(preconditions, get_browser):
-    app = BasePage(new_context=True, browser=get_browser, base_url=preconditions['base_url'])
-    app.goto('/')
-    yield app
-    app.close()
+    base = BasePage(new_context=True, browser=get_browser, base_url=preconditions['base_url'])
+    base.goto('/')
+    yield base
+    base.close()
 
 
 def pytest_addoption(parser):
