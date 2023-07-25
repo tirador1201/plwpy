@@ -47,7 +47,7 @@ def get_browser(get_playwright, request):
 
 @fixture(scope='class')
 def initial_page(read_config, browser):
-    base = BasePage(new_context=True, browser=browser, base_url=read_config['base_url'], **kwargs)
+    base = BasePage(new_context=True, browser=browser, base_url=read_config['base_url'])
     base.goto('/')
     yield base
     base.close()
