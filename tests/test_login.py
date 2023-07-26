@@ -5,8 +5,8 @@ from pages.login_page import LoginPage
 
 
 class TestLogin:
-    def test_login(self, initial_page, generate_email):
-        email = generate_email
+    def test_login(self, initial_page, generate_magic_link):
+        email = generate_magic_link
         home_page = HomePage(initial_page)
         home_page.enroll_now()
         # make sure login page is opened
@@ -20,7 +20,7 @@ class TestLogin:
         login_page.input_code('123')
         print('')
 
-    def test_login2(self, generate_email, initial_page, browser_name):
-        email = generate_email
+    def test_login2(self, generate_magic_link, initial_page, browser_name):
+        email = generate_magic_link
         home_page = HomePage(initial_page)
         print(email)

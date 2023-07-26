@@ -1,3 +1,4 @@
-
-# Ignore dynaconf secret files
-.secrets.*
+**/.pytest_cache
+**/test-reports
+**/report
+**/venv
