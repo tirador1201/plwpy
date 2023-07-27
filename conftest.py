@@ -19,14 +19,16 @@ def read_config(request):
 
 
 @fixture(scope='session')
-def generate_magic_link():
+def generate_magic_link(page, read_config):
     '''
     Necessary to generate magic link for logging to the system
     :return:
     '''
     print("create new email")
-    email = create_new_email()
-    magic_link = "http://onliner.by"
+    url_for_magic_link = read_config['url_for_magic_link']
+    page_instance = page
+    response = page_instance.request.post(url_for_magic_link)
+    magic_link = response.json().magic_link
     yield magic_link
 
 
