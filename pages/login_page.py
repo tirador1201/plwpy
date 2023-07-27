@@ -9,8 +9,10 @@ class LoginPage(BasePage):
     Class for elements on the login page
     '''
     def __init__(self, base, new_context=False):
-        super().__init__(new_context)
-        self.page = base.page
+        if new_context:
+            super().__init__(base.browser)
+        else:
+            self.page = base.page
         self.email_txb = self.page.locator('#username')
         self.code_txb = self.page.locator('#code')
         self.log_in_btn = self.page.locator("//button[.='Log in']")

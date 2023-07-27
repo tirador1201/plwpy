@@ -1,13 +1,11 @@
 from playwright.sync_api import Browser
 
-
 class BasePage:
-    def __init__(self, new_context, browser: Browser = '', base_url: str = '', **kwargs):
-        if new_context:
-            self.browser = browser
-            self.context = self.browser.new_context(**kwargs)
-            self.base_url = base_url
-            self.page = self.context.new_page()
+    def __init__(self, browser: Browser, base_url: str = '/', **kwargs):
+        self.browser = browser
+        self.context = self.browser.new_context(**kwargs)
+        self.base_url = base_url
+        self.page = self.context.new_page()
 
     def goto(self, endpoint: str, use_base_url=True):
         if use_base_url:

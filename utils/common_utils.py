@@ -5,6 +5,10 @@ import string
 from pathlib import Path
 
 def get_project_root() -> Path:
+    '''
+    Get root of the project
+    :return: root path
+    '''
     return Path(__file__).parent.parent
 
 def get_random_string(length):
